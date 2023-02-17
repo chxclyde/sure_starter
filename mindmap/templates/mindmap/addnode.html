@@ -1,0 +1,8 @@
+<div>
+    <form action="{% url 'addnode' %}" method="post">
+        <input type="text" name="text" required />
+        <input type="submit" name="create node" value="comment" />
+    </form>
+    {% load static %}
+    <script src="{% static 'js/mouse.js' %}"></script>
+</div>
