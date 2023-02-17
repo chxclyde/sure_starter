@@ -17,3 +17,8 @@ class Node(models.Model):
     text = models.CharField(max_length= 100)
     x = models.IntegerField()
     y = models.IntegerField()
+
+
+class Relation(models.Model):
+    node1=models.IntegerField()
+    node2=models.IntegerField()

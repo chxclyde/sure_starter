@@ -34,7 +34,21 @@
     <script src="{% static 'js/mouse.js' %}"></script>
     {% endif %}
     {% for node in nodes %}
-    <button class="button button1" style="position:fixed; left: {{node.x }} ; top:{{node.y}}" >{{node.text}}</button>
+    <button class="button button1" style="position:fixed; left: {{node.x }} ; top:{{node.y}}"
+        onclick="myFunction{{node.id}}()">{{node.text}}</button>
+    <script>
+        function myFunction{{ node.id }}(){
+            fetch('/mindmap/add_relation/', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id:{{node.id}} })
+    })
+        .then(response => { location.reload() })
+        }
+    </script>
     {% endfor %}
 
 </div>
