@@ -17,10 +17,14 @@ def index(request):
     template_name = 'mindmap/index.html'
 
     nodes = list(Node.objects.all().values())
+    rela = Relation.objects.all().values()
+    rela = list(rela.values())
+    print(rela)
+    # for this_rela in rela:
+    #     Node.objects.get(pk=this_rela['node1'])
     context = {'nodes': nodes, 'addnode_url': "mindmap/addnode",
                "is_add_node": is_add_node[0]}
-    print(nodes)
-
+    
     return HttpResponse(render(request, template_name, context))
 
 
@@ -34,7 +38,7 @@ def addnode(request):
 def addnode_put(request):
     global is_add_node
     body = json.loads(request.body)
-    n = Node(text=is_add_node[1], x=body["mousex"], y=body["mousey"]-100)
+    n = Node(text=is_add_node[1], x=body["mousex"], y=body["mousey"]-50)
     n.save()
     if request.method == 'POST':
         response = redirect("/mindmap/")
@@ -51,7 +55,7 @@ def add_relation(request):
         node1 = relation.pop()
         node2 = relation.pop()
         node1,node2 = (min(node1,node2) , max(node1,node2))
-        print(node1,node2)
+        
         r = Relation(node1=node1,node2=node2)
         r.save()
         print("add relation:",r,list(Relation.objects.all().values()))
