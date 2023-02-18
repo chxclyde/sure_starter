@@ -19,8 +19,15 @@
     .button2 {
         background-color: #008CBA;
     }
-
     /* Blue */
+    span {
+        display: block;
+        width: 50px;
+        padding: 0 20px;
+        margin: 0;
+        word-break: keep-all;
+        text-align: center;
+      }
 </style>
 <div>
     <form action="{% url 'addnode' %}" method="post">
@@ -35,7 +42,7 @@
     {% endif %}
     {% for node in nodes %}
     <button class="button button1" style="position:fixed; left: {{node.x }} ; top:{{node.y}}"
-        onclick="myFunction{{node.id}}()">{{node.text}}</button>
+        onclick="myFunction{{node.id}}()"><span>{{node.text}}</span></button>
     <script>
         function myFunction{{ node.id }}(){
             fetch('/mindmap/add_relation/', {

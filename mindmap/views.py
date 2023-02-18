@@ -19,7 +19,7 @@ def index(request):
     nodes = list(Node.objects.all().values())
     context = {'nodes': nodes, 'addnode_url': "mindmap/addnode",
                "is_add_node": is_add_node[0]}
-    
+    print(nodes)
 
     return HttpResponse(render(request, template_name, context))
 
@@ -34,7 +34,7 @@ def addnode(request):
 def addnode_put(request):
     global is_add_node
     body = json.loads(request.body)
-    n = Node(text=is_add_node[1], x=body["mousex"], y=body["mousey"])
+    n = Node(text=is_add_node[1], x=body["mousex"], y=body["mousey"]-100)
     n.save()
     if request.method == 'POST':
         response = redirect("/mindmap/")
