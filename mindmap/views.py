@@ -15,15 +15,20 @@ def index(request):
     global is_add_node
 
     template_name = 'mindmap/index.html'
-
+    lines = []
     nodes = list(Node.objects.all().values())
     rela = Relation.objects.all().values()
     rela = list(rela.values())
     print(rela)
-    # for this_rela in rela:
-    #     Node.objects.get(pk=this_rela['node1'])
+    for this_rela in rela:
+        node1 = Node.objects.get(pk=this_rela['node1']).__dict__
+        node2 = Node.objects.get(pk=this_rela['node2']).__dict__
+        print(node1,node2)
+        line = {"x1":node1["x"]+60 ,"y1":node1["y"]-50 , "x2":node2["x"]+60,"y2":node2["y"]-50}
+        lines.append(line)
+    print(lines)
     context = {'nodes': nodes, 'addnode_url': "mindmap/addnode",
-               "is_add_node": is_add_node[0]}
+               "is_add_node": is_add_node[0],"lines":lines}
     
     return HttpResponse(render(request, template_name, context))
 
