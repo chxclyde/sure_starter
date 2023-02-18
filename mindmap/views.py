@@ -1,4 +1,5 @@
 import json
+from django.db import connection
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template import loader
@@ -23,10 +24,8 @@ def index(request):
     for this_rela in rela:
         node1 = Node.objects.get(pk=this_rela['node1']).__dict__
         node2 = Node.objects.get(pk=this_rela['node2']).__dict__
-        print(node1,node2)
         line = {"x1":node1["x"]+60 ,"y1":node1["y"]-50 , "x2":node2["x"]+60,"y2":node2["y"]-50}
         lines.append(line)
-    print(lines)
     context = {'nodes': nodes, 'addnode_url': "mindmap/addnode",
                "is_add_node": is_add_node[0],"lines":lines}
     
@@ -63,5 +62,11 @@ def add_relation(request):
         
         r = Relation(node1=node1,node2=node2)
         r.save()
-        print("add relation:",r,list(Relation.objects.all().values()))
+        
+    return redirect("/mindmap/")
+
+@csrf_exempt
+def reset_db(request):
+    Node.objects.all().delete()
+    Relation.objects.all().delete()
     return redirect("/mindmap/")

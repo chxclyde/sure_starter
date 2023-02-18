@@ -36,7 +36,21 @@
     <input type="text" name="text" required />
     <input type="submit" name="create node" value="create node" />
 </form>
-<!-- <button onclick="reset"> reset concept map </button> -->
+<button onclick="reset()"> reset concept map </button>
+<script>
+    function reset()
+    {
+        fetch('/mindmap/reset_db/',{
+            method:'POST',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            
+        }
+        })
+        .then( response => {location.reload()} )
+    }
+</script>
 {% if is_add_node %}
     {% load static %}
     CLICK TO ADD NODES
@@ -46,7 +60,7 @@
     <svg width="100%" height="100%">
         {% for line in lines %}
         <!-- <line x1={{line.x1}} y1={{line.y1}} x2={{line.x2}} y2={{line.y2}} stroke="black"/> -->
-        <line x1={{line.x1}} y1={{line.y1}} x2={{line.x2}} y2={{line.y2}} stroke="black"/>
+        <line x1={{line.x1}} y1={{line.y1}} x2={{line.x2}} y2={{line.y2}} stroke="black"  stroke-width="4" stroke-linecap="butt" />
         {% endfor %}
         
 
