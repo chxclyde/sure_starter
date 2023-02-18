@@ -20,21 +20,24 @@ def index(request):
     nodes = list(Node.objects.all().values())
     rela = Relation.objects.all().values()
     rela = list(rela.values())
-    print(rela)
+    
     for this_rela in rela:
         node1 = Node.objects.get(pk=this_rela['node1']).__dict__
         node2 = Node.objects.get(pk=this_rela['node2']).__dict__
         line = {"x1":node1["x"]+60 ,"y1":node1["y"]-50 , "x2":node2["x"]+60,"y2":node2["y"]-50}
         lines.append(line)
     context = {'nodes': nodes, 'addnode_url': "mindmap/addnode",
-               "is_add_node": is_add_node[0],"lines":lines}
+               "is_add_node": is_add_node[0],"lines":lines,"add_type": is_add_node[-1].upper() }
     
     return HttpResponse(render(request, template_name, context))
 
 
 def addnode(request):
     global is_add_node
-    is_add_node = [True, request.POST.get('text')]
+    if 'create node' in request.POST.dict():
+        is_add_node = [True, request.POST.get('text'), "node"  ]
+    else:
+        is_add_node = [True, request.POST.get('text'), "relation"  ]
     return redirect("/mindmap/")
 
 
@@ -42,7 +45,8 @@ def addnode(request):
 def addnode_put(request):
     global is_add_node
     body = json.loads(request.body)
-    n = Node(text=is_add_node[1], x=body["mousex"], y=body["mousey"]-50)
+    print(is_add_node)
+    n = Node(text=is_add_node[1], x=body["mousex"], y=body["mousey"]-50,type=is_add_node[2] )
     n.save()
     if request.method == 'POST':
         response = redirect("/mindmap/")
@@ -59,7 +63,6 @@ def add_relation(request):
         node1 = relation.pop()
         node2 = relation.pop()
         node1,node2 = (min(node1,node2) , max(node1,node2))
-        
         r = Relation(node1=node1,node2=node2)
         r.save()
         

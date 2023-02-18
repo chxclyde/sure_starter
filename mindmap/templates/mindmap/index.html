@@ -11,7 +11,7 @@
         cursor: pointer;
     }
 
-    .button1 {
+    .node {
         background-color: #4CAF50;
         display: flex;
         flex-wrap: wrap;
@@ -19,11 +19,16 @@
         padding: 10px;
     }
 
-    /* Green */
-    .button2 {
-        background-color: #008CBA;
+    /* node button */
+    .relation {
+        background-color: #4CAF50;
+        display: flex;
+        flex-wrap: wrap;
+        width: 140px;
+        padding: 10px;
+        border-radius: 85%;
     }
-    /* Blue */
+    /* relation button */
     span {
         display: block;
         margin: 0;
@@ -35,6 +40,7 @@
     {% csrf_token %}
     <input type="text" name="text" required />
     <input type="submit" name="create node" value="create node" />
+    <input type="submit" name="create middle" value="create relation" />
 </form>
 <button onclick="reset()"> reset concept map </button>
 <script>
@@ -53,7 +59,7 @@
 </script>
 {% if is_add_node %}
     {% load static %}
-    CLICK TO ADD NODES
+    CLICK TO ADD {{add_type}}
     <script src="{% static 'js/mouse.js' %}"></script>
     {% endif %}
 <div style="width:1000;height: 1000; border-style: solid; top: 75; position: fixed;" >
@@ -68,7 +74,7 @@
     
     
     {% for node in nodes %}
-    <button class="button button1" style="position:fixed; left: {{node.x }} ; top:{{node.y}}"
+    <button class="button {{node.type}}" style="position:fixed; left: {{node.x }} ; top:{{node.y}}"
         onclick="myFunction{{node.id}}()">{{node.text}}</button>
     <script>
         function myFunction{{ node.id }}(){
